@@ -10,6 +10,7 @@ builds/glue.o
 builds/parser.out
 node_modules
 *.diff
+*.DS_Store
 
 # Vim
 [._]*.s[a-v][a-z]

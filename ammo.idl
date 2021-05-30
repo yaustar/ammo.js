@@ -1,26 +1,6 @@
 
 // Linear Math
 
-interface btIDebugDraw {
-  void drawLine([Const, Ref] btVector3 from, [Const, Ref] btVector3 to, [Const, Ref] btVector3 color);
-  void drawContactPoint([Const, Ref] btVector3 pointOnB, [Const, Ref] btVector3 normalOnB, float distance, long lifeTime, [Const, Ref] btVector3 color);
-  void reportErrorWarning([Const] DOMString warningString);
-  void draw3dText([Const, Ref] btVector3 location, [Const] DOMString textString);
-  void setDebugMode(long debugMode);
-  long getDebugMode();
-};
-
-[JSImplementation="btIDebugDraw"]
-interface DebugDrawer {
-  void DebugDrawer();
-  void drawLine([Const, Ref] btVector3 from, [Const, Ref] btVector3 to, [Const, Ref] btVector3 color);
-  void drawContactPoint([Const, Ref] btVector3 pointOnB, [Const, Ref] btVector3 normalOnB, float distance, long lifeTime, [Const, Ref] btVector3 color);
-  void reportErrorWarning([Const] DOMString warningString);
-  void draw3dText([Const, Ref] btVector3 location, [Const] DOMString textString);
-  void setDebugMode(long debugMode);
-  [Const] long getDebugMode();
-};
-
 interface btVector3 {
   void btVector3();
   void btVector3(float x, float y, float z);
@@ -726,8 +706,6 @@ interface btCollisionWorld {
   void contactPairTest(btCollisionObject colObjA, btCollisionObject colObjB, [Ref] ContactResultCallback resultCallback);
   void contactTest(btCollisionObject colObj, [Ref] ContactResultCallback resultCallback);
   void updateSingleAabb(btCollisionObject colObj);
-  void setDebugDrawer(btIDebugDraw debugDrawer);
-  btIDebugDraw getDebugDrawer();
   void debugDrawWorld();
   void debugDrawObject([Const, Ref] btTransform worldTransform, [Const] btCollisionShape shape, [Const, Ref] btVector3 color);
 };
@@ -768,169 +746,9 @@ interface btDiscreteDynamicsWorld {
 };
 btDiscreteDynamicsWorld implements btDynamicsWorld;
 
-[Prefix="btRaycastVehicle::", NoDelete]
-interface btVehicleTuning {
-  void btVehicleTuning();
-  attribute float m_suspensionStiffness;
-  attribute float m_suspensionCompression;
-  attribute float m_suspensionDamping;
-  attribute float m_maxSuspensionTravelCm;
-  attribute float m_frictionSlip;
-  attribute float m_maxSuspensionForce;
-};
-
-[Prefix="btDefaultVehicleRaycaster::"]
-interface btVehicleRaycasterResult {
-    [Value] attribute btVector3 m_hitPointInWorld;
-    [Value] attribute btVector3 m_hitNormalInWorld;
-    attribute float m_distFraction;
-};
-
-interface btVehicleRaycaster {
-    void castRay ([Const, Ref] btVector3 from, [Const, Ref] btVector3 to, [Ref] btVehicleRaycasterResult result);
-};
-
-interface btDefaultVehicleRaycaster {
-  void btDefaultVehicleRaycaster(btDynamicsWorld world);
-};
-btDefaultVehicleRaycaster implements btVehicleRaycaster;
-
-[Prefix="btWheelInfo::"]
-interface RaycastInfo {
-  [Value] attribute btVector3 m_contactNormalWS;
-  [Value] attribute btVector3 m_contactPointWS;
-  attribute float m_suspensionLength;
-  [Value] attribute btVector3 m_hardPointWS;
-  [Value] attribute btVector3 m_wheelDirectionWS;
-  [Value] attribute btVector3 m_wheelAxleWS;
-  attribute boolean m_isInContact;
-  attribute any m_groundObject;
-};
-
-interface btWheelInfoConstructionInfo {
-    [Value] attribute btVector3 m_chassisConnectionCS;
-    [Value] attribute btVector3 m_wheelDirectionCS;
-    [Value] attribute btVector3 m_wheelAxleCS;
-    attribute float m_suspensionRestLength;
-    attribute float m_maxSuspensionTravelCm;
-    attribute float m_wheelRadius;
-    attribute float m_suspensionStiffness;
-    attribute float m_wheelsDampingCompression;
-    attribute float m_wheelsDampingRelaxation;
-    attribute float m_frictionSlip;
-    attribute float m_maxSuspensionForce;
-    attribute boolean m_bIsFrontWheel;
-};
-
-interface btWheelInfo {
-  attribute float m_suspensionStiffness;
-  attribute float m_frictionSlip;
-  attribute float m_engineForce;
-  attribute float m_rollInfluence;
-  attribute float m_suspensionRestLength1;
-  attribute float m_wheelsRadius;
-  attribute float m_wheelsDampingCompression;
-  attribute float m_wheelsDampingRelaxation;
-  attribute float m_steering;
-  attribute float m_maxSuspensionForce;
-  attribute float m_maxSuspensionTravelCm;
-  attribute float m_wheelsSuspensionForce;
-  attribute boolean m_bIsFrontWheel;
-  [Value] attribute RaycastInfo m_raycastInfo;
-  [Value] attribute btVector3 m_chassisConnectionPointCS;
-  void btWheelInfo([Ref] btWheelInfoConstructionInfo ci);
-  float getSuspensionRestLength ();
-  void  updateWheel ([Const, Ref] btRigidBody chassis, [Ref] RaycastInfo raycastInfo);
-  [Value] attribute btTransform m_worldTransform;
-  [Value] attribute btVector3 m_wheelDirectionCS;
-  [Value] attribute btVector3 m_wheelAxleCS;
-  attribute float m_rotation;
-  attribute float m_deltaRotation;
-  attribute float m_brake;
-  attribute float  m_clippedInvContactDotSuspension;
-  attribute float  m_suspensionRelativeVelocity;
-  attribute float  m_skidInfo;
-};
-
 interface btActionInterface {
     void updateAction (btCollisionWorld collisionWorld, float deltaTimeStep);
 };
-
-interface btKinematicCharacterController {
-  void btKinematicCharacterController(btPairCachingGhostObject ghostObject, btConvexShape convexShape, float stepHeight, optional long upAxis);
-
-  void setUpAxis (long axis);
-  void setWalkDirection ([Const,Ref] btVector3 walkDirection);
-  void setVelocityForTimeInterval ([Const,Ref] btVector3 velocity, float timeInterval);
-  //void reset ();
-  void warp ([Const, Ref]btVector3 origin);
-  void preStep (btCollisionWorld collisionWorld);
-  void playerStep (btCollisionWorld collisionWorld, float dt);
-  void setFallSpeed (float fallSpeed);
-  void setJumpSpeed (float jumpSpeed);
-  void setMaxJumpHeight (float maxJumpHeight);
-  boolean canJump ();
-  void jump ();
-  void setGravity (float gravity);
-  float getGravity ();
-  void setMaxSlope (float slopeRadians);
-  float getMaxSlope ();
-  btPairCachingGhostObject getGhostObject ();
-  void setUseGhostSweepTest (boolean useGhostObjectSweepTest);
-  boolean onGround ();
-  void setUpInterpolate (boolean value);
-};
-btKinematicCharacterController implements btActionInterface;
-
-interface btRaycastVehicle {
-  void btRaycastVehicle([Const, Ref] btVehicleTuning tuning, btRigidBody chassis, btVehicleRaycaster raycaster);
-  void applyEngineForce(float force, long wheel);
-  void setSteeringValue(float steering, long wheel);
-  [Const, Ref] btTransform getWheelTransformWS(long wheelIndex);
-  void updateWheelTransform(long wheelIndex, boolean interpolatedTransform);
-  [Ref] btWheelInfo addWheel([Const, Ref] btVector3 connectionPointCS0, [Const, Ref] btVector3 wheelDirectionCS0, [Const, Ref] btVector3 wheelAxleCS, float suspensionRestLength, float wheelRadius, [Const, Ref] btVehicleTuning tuning, boolean isFrontWheel);
-  long getNumWheels();
-  btRigidBody getRigidBody();
-  [Ref] btWheelInfo getWheelInfo(long index);
-  void setBrake(float brake, long wheelIndex);
-  void setCoordinateSystem(long rightIndex, long upIndex, long forwardIndex);
-  float getCurrentSpeedKmHour();
-  [Const, Ref] btTransform getChassisWorldTransform();
-  float rayCast([Ref] btWheelInfo wheel);
-  void updateVehicle(float step);
-  void resetSuspension();
-  float getSteeringValue(long wheel);
-  void updateWheelTransformsWS([Ref] btWheelInfo wheel, optional boolean interpolatedTransform);
-  void setPitchControl(float pitch);
-  void updateSuspension(float deltaTime);
-  void updateFriction(float timeStep);
-  long getRightAxis();
-  long getUpAxis();
-  long getForwardAxis();
-  [Value] btVector3 getForwardVector();
-  long getUserConstraintType();
-  void setUserConstraintType(long userConstraintType);
-  void setUserConstraintId(long uid);
-  long getUserConstraintId();
-};
-btRaycastVehicle implements btActionInterface;
-
-interface btGhostObject {
-  void btGhostObject();
-  long getNumOverlappingObjects();
-  btCollisionObject getOverlappingObject(long index);
-};
-btGhostObject implements btCollisionObject;
-
-interface btPairCachingGhostObject {
-  void btPairCachingGhostObject();
-};
-btPairCachingGhostObject implements btGhostObject;
-
-interface btGhostPairCallback {
-  void btGhostPairCallback();
-};
-
 
 // soft bodies
 

@@ -318,11 +318,6 @@ interface btSphereShape {
 };
 btSphereShape implements btCollisionShape;
 
-interface btMultiSphereShape {
-  void btMultiSphereShape([Const] btVector3 positions, [Const] float[] radii, long numPoints);
-};
-btMultiSphereShape implements btCollisionShape;
-
 interface btConeShape {
   void btConeShape(float radius, float height);
 };
@@ -343,43 +338,9 @@ interface btIntArray {
   long at(long n);
 };
 
-interface btFace {
-  [Value] attribute btIntArray m_indices;
-  attribute float[] m_plane;
-};
-
 interface btVector3Array {
   long size();
   [Const, Ref] btVector3 at(long n);
-};
-
-interface btFaceArray {
-  long size();
-  [Const, Ref] btFace at(long n);
-};
-
-interface btConvexPolyhedron {
-  [Value] attribute btVector3Array m_vertices;
-  [Value] attribute btFaceArray m_faces;
-};
-
-interface btConvexHullShape {
-  void btConvexHullShape([Const] optional float[] points, optional long numPoints);
-  void addPoint([Const, Ref] btVector3 point, optional boolean recalculateLocalAABB);
-  void setMargin(float margin);
-  float getMargin();
-  long getNumVertices();
-  boolean initializePolyhedralFeatures(long shiftVerticesByMargin);
-  void recalcLocalAabb();
-  [Const] btConvexPolyhedron getConvexPolyhedron();
-};
-btConvexHullShape implements btCollisionShape;
-
-interface btShapeHull {
-  void btShapeHull(btConvexShape shape);
-  boolean buildHull(float margin);
-  long numVertices();
-  [Const] btVector3 getVertexPointer();
 };
 
 interface btCompoundShape {
@@ -429,11 +390,6 @@ enum PHY_ScalarType {
 interface btConcaveShape {
 };
 btConcaveShape implements btCollisionShape;
-
-interface btEmptyShape {
-  void btEmptyShape();
-};
-btEmptyShape implements btConcaveShape;
 
 interface btStaticPlaneShape {
   void btStaticPlaneShape([Const, Ref] btVector3 planeNormal, float planeConstant);

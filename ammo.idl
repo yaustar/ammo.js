@@ -518,6 +518,10 @@ interface btRigidBody {
 };
 btRigidBody implements btCollisionObject;
 
+interface btSequentialImpulseConstraintSolver {
+  void btSequentialImpulseConstraintSolver();
+};
+
 interface btConstraintSolver {
 };
 
